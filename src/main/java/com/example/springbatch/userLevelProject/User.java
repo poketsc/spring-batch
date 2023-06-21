@@ -1,11 +1,13 @@
 package com.example.springbatch.userLevelProject;
 
+import com.example.springbatch.userOrders.Orders;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Entity
@@ -22,14 +24,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Level level = Level.NORMAL;
 
-    private int totalAmount;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="user_id")
+    private List<Orders> orders;
 
     private LocalDate updatedDate;
 
     @Builder
-    private User(String userName, int totalAmount) {
+    private User(String userName, List<Orders> orders) {
         this.userName = userName;
-        this.totalAmount = totalAmount;
+        this.orders = orders;
     }
 
     public Level levelUp() {
@@ -39,6 +43,12 @@ public class User {
         this.updatedDate = LocalDate.now();
 
         return nextLevel;
+    }
+
+    private int getTotalAmount() {
+        return this.orders.stream()
+                .mapToInt(Orders::getAmount)
+                .sum();
     }
 
     public boolean availableLevelUp() {
