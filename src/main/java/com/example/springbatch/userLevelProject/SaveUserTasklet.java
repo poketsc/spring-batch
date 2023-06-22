@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SaveUserTasklet implements Tasklet {
 
-    private final int SIZE = 100;
+    private final int SIZE = 10_000;
     private final UserRepository userRepository;
 
     public SaveUserTasklet(UserRepository userRepository) {
@@ -49,7 +49,7 @@ public class SaveUserTasklet implements Tasklet {
             users.add(User.builder()
                     .orders(Collections.singletonList(Orders.builder()
                             .amount(200_000)
-                            .createdDate(LocalDate.of(2020,12,2))
+                            .createdDate(LocalDate.of(2020,11,2))
                             .itemName("item" + i)
                             .build()
                     ))
